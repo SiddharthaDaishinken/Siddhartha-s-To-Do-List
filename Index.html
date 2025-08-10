@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Zero-Cost AI Developer Curriculum</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px; }
+  h1 { text-align: center; }
+  h2 { background: #444; color: #fff; padding: 10px; }
+  .topic { background: #fff; margin: 5px 0; padding: 10px; border-radius: 5px; }
+  label { cursor: pointer; }
+  .completed { text-decoration: line-through; color: gray; }
+  a { color: #0066cc; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>Siddhartha's To-Do List</h1>
+<h1>Zero-Cost AI Developer Curriculum</h1>
+<h1>TARGET: November-25</h1>
+<div id="curriculum"></div>
+
+<script>
+const curriculum = [
+  {
+    stage: "Mathematics Foundations",
+    topics: [
+      { text: "Linear Algebra – Khan Academy", url: "https://www.khanacademy.org/math/linear-algebra" },
+      { text: "Linear Algebra – MIT OCW", url: "https://ocw.mit.edu/courses/mathematics/18-06sc-linear-algebra-fall-2011/" },
+      { text: "Probability & Statistics – Khan Academy", url: "https://www.khanacademy.org/math/statistics-probability" },
+      { text: "Think Stats (Free eBook)", url: "https://greenteapress.com/wp/think-stats/" },
+      { text: "Calculus – Professor Leonard (YouTube)", url: "https://www.youtube.com/user/professorleonard57" },
+      { text: "Multivariable Calculus – Khan Academy", url: "https://www.khanacademy.org/math/multivariable-calculus" },
+      { text: "Discrete Mathematics – MIT OCW", url: "https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-042j-mathematics-for-computer-science-fall-2005/" }
+    ]
+  },
+  {
+    stage: "Programming & Software Foundations",
+    topics: [
+      { text: "Python for Everybody – Coursera (Audit Free)", url: "https://www.coursera.org/specializations/python" },
+      { text: "Automate the Boring Stuff with Python (Free Book)", url: "https://automatetheboringstuff.com/" },
+      { text: "FreeCodeCamp DSA in Python", url: "https://www.youtube.com/watch?v=pkYVOmU3MgA" },
+      { text: "CS50 Harvard (Free)", url: "https://cs50.harvard.edu/x/" }
+    ]
+  },
+  {
+    stage: "Machine Learning Core",
+    topics: [
+      { text: "Google ML Crash Course", url: "https://developers.google.com/machine-learning/crash-course" },
+      { text: "Hands-On ML with Scikit-Learn (1st Ed Free)", url: "https://github.com/ageron/handson-ml" },
+      { text: "StatQuest – k-means, PCA videos", url: "https://www.youtube.com/user/joshstarmer" }
+    ]
+  },
+  {
+    stage: "Deep Learning",
+    topics: [
+      { text: "Neural Networks – 3Blue1Brown", url: "https://www.youtube.com/watch?v=aircAruvnKk" },
+      { text: "PyTorch Beginner Series – Microsoft", url: "https://www.youtube.com/playlist?list=PLl2Z9JrL3jHtf3yU5oV1qT4F3_zfFYg3D" },
+      { text: "CNNs – CS231n Stanford", url: "http://cs231n.stanford.edu/" },
+      { text: "The Illustrated RNN/LSTM/GRU", url: "https://colah.github.io/posts/2015-08-Understanding-LSTMs/" }
+    ]
+  },
+  {
+    stage: "Natural Language Processing",
+    topics: [
+      { text: "Coursera NLP Specialization (Audit Free)", url: "https://www.coursera.org/specializations/natural-language-processing" },
+      { text: "The Illustrated Transformer", url: "https://jalammar.github.io/illustrated-transformer/" },
+      { text: "Hugging Face Course", url: "https://huggingface.co/course/" }
+    ]
+  },
+  {
+    stage: "Large Language Models & Generative AI",
+    topics: [
+      { text: "Hugging Face Transformers Documentation", url: "https://huggingface.co/docs/transformers/index" },
+      { text: "Prompt Engineering Guide", url: "https://www.promptingguide.ai/" }
+    ]
+  },
+  {
+    stage: "Deployment & Scaling",
+    topics: [
+      { text: "FastAPI Documentation", url: "https://fastapi.tiangolo.com/" },
+      { text: "Deploy on Hugging Face Spaces", url: "https://huggingface.co/spaces" },
+      { text: "Streamlit Cloud", url: "https://streamlit.io/cloud" }
+    ]
+  }
+];
+
+// Load saved state
+const savedState = JSON.parse(localStorage.getItem("curriculumState") || "{}");
+
+function renderCurriculum() {
+  const container = document.getElementById("curriculum");
+  container.innerHTML = "";
+  curriculum.forEach((stageObj, stageIndex) => {
+    const stageDiv = document.createElement("div");
+    const stageTitle = document.createElement("h2");
+    stageTitle.textContent = stageObj.stage;
+    stageDiv.appendChild(stageTitle);
+
+    stageObj.topics.forEach((topic, topicIndex) => {
+      const topicDiv = document.createElement("div");
+      topicDiv.className = "topic";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = `stage${stageIndex}-topic${topicIndex}`;
+      checkbox.checked = savedState[checkbox.id] || false;
+
+      const label = document.createElement("label");
+      label.htmlFor = checkbox.id;
+
+      const link = document.createElement("a");
+      link.href = topic.url;
+      link.target = "_blank";
+      link.textContent = topic.text;
+
+      label.appendChild(link);
+
+      if (checkbox.checked) {
+        label.classList.add("completed");
+      }
+
+      checkbox.addEventListener("change", () => {
+        savedState[checkbox.id] = checkbox.checked;
+        localStorage.setItem("curriculumState", JSON.stringify(savedState));
+        if (checkbox.checked) {
+          label.classList.add("completed");
+        } else {
+          label.classList.remove("completed");
+        }
+      });
+
+      topicDiv.appendChild(checkbox);
+      topicDiv.appendChild(label);
+      stageDiv.appendChild(topicDiv);
+    });
+
+    container.appendChild(stageDiv);
+  });
+}
+
+renderCurriculum();
+</script>
+
+</body>
+</html>
